@@ -1,81 +1,172 @@
 function checarTipoTela() {
     const tipoTela = document.getElementById("tipoTela").value;
     const campoOutros = document.getElementById("campoOutros");
-    campoOutros.style.display = (tipoTela === "Outros") ? "block" : "none";
+    campoOutros.style.display = tipoTela === "Outros" ? "block" : "none";
 }
 
-function gerarCSV() {
-    // Função auxiliar para criar o CSV
-    const criarCSV = (dados) => {
-        const linhas = dados.map(d => d.join(","));
-        return linhas.join("\n");
-    };
+function adicionarCampo() {
+    const camposAdicionais = document.getElementById("camposAdicionais");
+    const campoIndividual = document.createElement("div");
+    campoIndividual.className = "campoIndividual";
 
-    // Dados a serem exportados
-    const dados = [
-        ["Seção", "Conteúdo"],
-        ["1. Tipo de Tela", `
-            1.1 Tipo: ${document.getElementById("tipoTela").value}
-            1.2 Outro Tipo: ${document.getElementById("outroTipoTela").value || 'N/A'}
-            1.3 Função: ${document.getElementById("funcaoTela").value}
-            1.4 Responsável: ${document.getElementById("responsavelTela").value}
-        `],
-        ["2. Campos", ` 
-            Nome do Campo: ${document.getElementById("nomeCampo").value}
-            2.1 Tipo: ${document.getElementById("tipoCampo").value}
-            2.2 Tamanho: ${document.getElementById("tamanhoCampo").value}
-            2.3 Validações: ${document.getElementById("validacaoCampo").value}
-            2.4 Restrições: ${document.getElementById("restricoesCampo").value}
-            2.5 Valores Padrão: ${document.getElementById("valoresPadraoCampo").value}
-            2.6 Eventos: ${document.getElementById("eventosCampo").value}
-            2.7 Provedor de Dados: ${document.getElementById("provedorDadosCampo").value}
-        `],
-        ["3. Regras de Negócio", `
-            3.1 Lógica de Processamento: ${document.getElementById("logicaProcessamento").value}
-            3.2 Ações Condicionais: ${document.getElementById("acoesCondicionais").value}
-            3.3 Permissões: ${document.getElementById("permissoes").value}
-            3.4 Cálculos Automatizados: ${document.getElementById("calculosAutomatizados").value}
-            3.5 Fluxo de Ação: ${document.getElementById("fluxoAcao").value}
-        `],
-        ["4. UI/UX (Interface e Experiência)", `
-            4.1 Layout: ${document.getElementById("layout").value}
-            4.2 Estilo: ${document.getElementById("estilo").value}
-            4.3 Feedback Visual: ${document.getElementById("feedbackVisual").value}
-            4.4 Navegação: ${document.getElementById("navegacao").value}
-        `],
-        ["5. Integração com Outros Sistemas", `
-            5.1 APIs: ${document.getElementById("apis").value}
-            5.2 Banco de Dados: ${document.getElementById("bancoDeDados").value}
-            5.3 Outros Sistemas: ${document.getElementById("outrosSistemas").value}
-        `],
-        ["6. Desempenho e Escalabilidade", `
-            6.1 Tempo de Resposta: ${document.getElementById("tempoResposta").value}
-            6.2 Carga de Dados: ${document.getElementById("cargaDeDados").value}
-        `],
-        ["7. Mensagens de Erro e Logging", `
-            7.1 Mensagens de Erro: ${document.getElementById("mensagensDeErro").value}
-            7.2 Logging: ${document.getElementById("logging").value}
-        `],
-        ["8. Testes", `
-            8.1 Critérios de Aceitação: ${document.getElementById("criteriosAceitacao").value}
-            8.2 Cenários de Teste: ${document.getElementById("cenariosTeste").value}
-        `],
-        ["9. Links e Dependências", `
-            9.1 Dependências: ${document.getElementById("dependencias").value}
-            9.2 Outros Módulos/Telas: ${document.getElementById("outrosModulos").value}
-        `]
-    ];
-
-    // Criação do CSV
-    const csv = criarCSV(dados);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
+    campoIndividual.innerHTML = `
+    <div class="card">
+        <label for="nomeCampo">Nome do Campo:</label>
+        <input type="text" class="nomeCampo" placeholder="Nome de exibição e nome técnico" >
+        
+        <label for="tipoCampo">Tipo:</label>
+        <input type="text" class="tipoCampo" placeholder="Texto, Numérico, Lista suspensa, etc." >
+        
+        <label for="tamanhoCampo">Tamanho:</label>
+        <input type="text" class="tamanhoCampo" placeholder="Limite de caracteres ou tamanho do campo" >
+        
+        <label for="validacaoCampo">Validações:</label>
+        <textarea class="validacaoCampo" placeholder="Regras de validação (obrigatório, formato específico, etc.)" ></textarea>
+        
+        <label for="restricoesCampo">Restrições:</label>
+        <textarea class="restricoesCampo" placeholder="Campo desabilitado, só leitura, máscaras, etc." ></textarea>
+        
+        <label for="valoresPadraoCampo">Valores Padrão:</label>
+        <input type="text" class="valoresPadraoCampo" placeholder="Valores que aparecem por padrão (se houver)">
+        
+        <label for="eventosCampo">Eventos:</label>
+        <textarea class="eventosCampo" placeholder="Eventos ou triggers associados ao campo"></textarea>
+        
+        <label for="provedorDadosCampo">Provedor de Dados:</label>
+        <input type="text" class="provedorDadosCampo" placeholder="Quais APIs ou fontes de dados alimentam este campo?">
+        </div>
+    `;
     
-    // Criação do link para download
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "relatorio.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    camposAdicionais.appendChild(campoIndividual);
 }
+function gerarCSV() {
+    const nomeFormulario = document.getElementById("nomeFormulario").value;
+    const tipoTela = document.getElementById("tipoTela").value;
+    const funcaoTela = document.getElementById("funcaoTela").value;
+    const responsavelTela = document.getElementById("responsavelTela").value;
+    const campos = document.querySelectorAll(".campoIndividual");
+    
+    // Initialize an array to store key-value pairs
+    const csvData = [];
+
+    // Add general form information
+    csvData.push(["Nome da Tela", nomeFormulario]);
+    csvData.push(["Tipo de Tela", tipoTela]);
+    csvData.push(["Função", funcaoTela]);
+    csvData.push(["Responsável", responsavelTela]);
+
+    // Add Campos information
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["Campo", "Valor"]);
+    campos.forEach(campo => {
+        csvData.push(["", ""]); // Blank row for separation
+        const nomeCampo = campo.querySelector(".nomeCampo").value;
+        const tipoCampo = campo.querySelector(".tipoCampo").value;
+        const tamanhoCampo = campo.querySelector(".tamanhoCampo").value;
+        const validacaoCampo = campo.querySelector(".validacaoCampo").value;
+        const restricoesCampo = campo.querySelector(".restricoesCampo").value;
+        const valoresPadraoCampo = campo.querySelector(".valoresPadraoCampo").value;
+        const eventosCampo = campo.querySelector(".eventosCampo").value;
+        const provedorDadosCampo = campo.querySelector(".provedorDadosCampo").value;
+
+        // Push each field's values as key-value pairs
+        csvData.push([`Nome`, nomeCampo]);
+        csvData.push([`Tipo`, tipoCampo]);
+        csvData.push([`Tamanho`, tamanhoCampo]);
+        csvData.push([`Validações`, validacaoCampo]);
+        csvData.push([`Restrições`, restricoesCampo]);
+        csvData.push([`Valores Padrão`, valoresPadraoCampo]);
+        csvData.push([`Eventos`, eventosCampo]);
+        csvData.push([`Provedor de Dados`, provedorDadosCampo]);
+    });
+
+    // Add regras de negocio
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["Regras de Negócio", ""]);
+    for (const [key, value] of Object.entries({
+        logicaProcessamento: document.getElementById("logicaProcessamento").value,
+        acoesCondicionais: document.getElementById("acoesCondicionais").value,
+        permissoes: document.getElementById("permissoes").value,
+        calculosAutomatizados: document.getElementById("calculosAutomatizados").value,
+        fluxoAcao: document.getElementById("fluxoAcao").value
+    })) {
+        csvData.push([key, value]);
+    }
+
+    // Add UI/UX
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["UI/UX", ""]);
+    for (const [key, value] of Object.entries({
+        layout: document.getElementById("layout").value,
+        estilo: document.getElementById("estilo").value,
+        feedbackVisual: document.getElementById("feedbackVisual").value,
+        navegacao: document.getElementById("navegacao").value
+    })) {
+        csvData.push([key, value]);
+    }
+
+    // Add integração
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["Integração", ""]);
+    for (const [key, value] of Object.entries({
+        apis: document.getElementById("apis").value,
+        bancoDeDados: document.getElementById("bancoDeDados").value,
+        outrosSistemas: document.getElementById("outrosSistemas").value
+    })) {
+        csvData.push([key, value]);
+    }
+
+    // Add desempenho
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["Desempenho", ""]);
+    for (const [key, value] of Object.entries({
+        tempoResposta: document.getElementById("tempoResposta").value,
+        cargaDeDados: document.getElementById("cargaDeDados").value
+    })) {
+        csvData.push([key, value]);
+    }
+
+    // Add mensagens de erro
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["Mensagens de Erro", ""]);
+    for (const [key, value] of Object.entries({
+        mensagensDeErro: document.getElementById("mensagensDeErro").value,
+        logging: document.getElementById("logging").value
+    })) {
+        csvData.push([key, value]);
+    }
+
+    // Add testes
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["Testes", ""]);
+    for (const [key, value] of Object.entries({
+        criteriosAceitacao: document.getElementById("criteriosAceitacao").value,
+        cenariosTeste: document.getElementById("cenariosTeste").value
+    })) {
+        csvData.push([key, value]);
+    }
+
+    // Add links e dependências
+    csvData.push(["", ""]); // Blank row for separation
+    csvData.push(["Links e Dependências", ""]);
+    for (const [key, value] of Object.entries({
+        dependencias: document.getElementById("dependencias").value,
+        linksUteis: document.getElementById("linksUteis").value
+    })) {
+        csvData.push([key, value]);
+    }
+
+    // Convert the data to CSV format
+    const csvContent = csvData.map(e => e.join(",")).join("\n");
+
+    // Create a Blob and trigger the download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.setAttribute("href", url);
+    a.setAttribute("download", `${nomeFormulario}.csv`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+

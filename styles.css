@@ -80,3 +80,12 @@ button:hover {
 #campoOutros {
     margin-top: 10px;
 }
+
+.card {
+    border: 1px solid #218838; /* Green color for the top border */
+    padding: 16px; /* Space inside the card */
+    background-color: #ffffff; /* Background color of the card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+    margin-bottom: 10px;
+}

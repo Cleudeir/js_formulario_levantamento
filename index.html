@@ -5,16 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de PDF - Questionário</title>
     <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
     <div class="container">
         <h1>Preencha o Questionário</h1>
-        <form id="questionarioForm">
+        <form id="questionarioForm" onsubmit="gerarCSV(); return false;">
+            <!-- Nome do Formulário -->
+            <div class="section">
+                <h3>Nome do Tela</h3>
+                <input type="text" id="nomeFormulario" placeholder="Insira o nome do Tela" >
+            </div>
+
             <!-- Tipo de Tela -->
             <div class="section">
-                <h3>1. Tipo de Tela</h3>
-                <label for="tipoTela">1.1 Tipo:</label>
+                <h3>Tipo de Tela</h3>
+                <label for="tipoTela">Tipo:</label>
                 <select id="tipoTela" onchange="checarTipoTela()">
                     <option value="Formulário">Formulário</option>
                     <option value="Consulta">Consulta</option>
@@ -28,132 +33,140 @@
                     <input type="text" id="outroTipoTela" placeholder="Escreva o tipo de tela">
                 </div>
 
-                <label for="funcaoTela">1.2 Função:</label>
-                <textarea id="funcaoTela" placeholder="Qual é o objetivo dessa tela?"></textarea>
+                <label for="funcaoTela">Função:</label>
+                <textarea id="funcaoTela" placeholder="Qual é o objetivo dessa tela?" ></textarea>
 
-                <label for="responsavelTela">1.3 Responsável:</label>
-                <input type="text" id="responsavelTela" placeholder="Quem é o responsável por essa tela?">
+                <label for="responsavelTela">Responsável:</label>
+                <input type="text" id="responsavelTela" placeholder="Quem é o responsável por essa tela?" >
             </div>
 
             <!-- Campos -->
             <div class="section">
-                <h3>2. Campos</h3>
-                <label for="nomeCampo">2.1 Nome do Campo:</label>
-                <input type="text" id="nomeCampo" placeholder="Nome de exibição e nome técnico">
+                <h3>Campos</h3>
+                <div id="camposAdicionais">
+                    <div class="campoIndividual">
+                        <div class="card">
+                        <label for="nomeCampo">Nome do Campo:</label>
+                        <input type="text" class="nomeCampo" placeholder="Nome de exibição e nome técnico" >
 
-                <label for="tipoCampo">2.2 Tipo:</label>
-                <input type="text" id="tipoCampo" placeholder="Texto, Numérico, Lista suspensa, etc.">
+                        <label for="tipoCampo">Tipo:</label>
+                        <input type="text" class="tipoCampo" placeholder="Texto, Numérico, Lista suspensa, etc." >
 
-                <label for="tamanhoCampo">2.3 Tamanho:</label>
-                <input type="text" id="tamanhoCampo" placeholder="Limite de caracteres ou tamanho do campo">
+                        <label for="tamanhoCampo">Tamanho:</label>
+                        <input type="text" class="tamanhoCampo" placeholder="Limite de caracteres ou tamanho do campo" >
 
-                <label for="validacaoCampo">2.4 Validações:</label>
-                <textarea id="validacaoCampo" placeholder="Regras de validação (obrigatório, formato específico, etc.)"></textarea>
+                        <label for="validacaoCampo">Validações:</label>
+                        <textarea class="validacaoCampo" placeholder="Regras de validação (obrigatório, formato específico, etc.)" ></textarea>
 
-                <label for="restricoesCampo">2.5 Restrições:</label>
-                <textarea id="restricoesCampo" placeholder="Campo desabilitado, só leitura, máscaras, etc."></textarea>
+                        <label for="restricoesCampo">Restrições:</label>
+                        <textarea class="restricoesCampo" placeholder="Campo desabilitado, só leitura, máscaras, etc." ></textarea>
 
-                <label for="valoresPadraoCampo">2.6 Valores Padrão:</label>
-                <input type="text" id="valoresPadraoCampo" placeholder="Valores que aparecem por padrão (se houver)">
+                        <label for="valoresPadraoCampo">Valores Padrão:</label>
+                        <input type="text" class="valoresPadraoCampo" placeholder="Valores que aparecem por padrão (se houver)">
 
-                <label for="eventosCampo">2.7 Eventos:</label>
-                <textarea id="eventosCampo" placeholder="Eventos ou triggers associados ao campo"></textarea>
+                        <label for="eventosCampo">Eventos:</label>
+                        <textarea class="eventosCampo" placeholder="Eventos ou triggers associados ao campo"></textarea>
 
-                <label for="provedorDadosCampo">2.8 Provedor de Dados:</label>
-                <input type="text" id="provedorDadosCampo" placeholder="Quais APIs ou fontes de dados alimentam este campo?">
+                        <label for="provedorDadosCampo">Provedor de Dados:</label>
+                        <input type="text" class="provedorDadosCampo" placeholder="Quais APIs ou fontes de dados alimentam este campo?">
+                    </div>
+                    </div>
+                </div>
+                <button type="button" onclick="adicionarCampo()">Adicionar Campo</button>
             </div>
 
             <!-- Regras de Negócio -->
             <div class="section">
-                <h3>3. Regras de Negócio</h3>
-                <label for="logicaProcessamento">3.1 Lógica de Processamento:</label>
+                <h3>Regras de Negócio</h3>
+                <label for="logicaProcessamento">Lógica de Processamento:</label>
                 <textarea id="logicaProcessamento" placeholder="Quais são as regras de processamento associadas à tela?"></textarea>
 
-                <label for="acoesCondicionais">3.2 Ações Condicionais:</label>
+                <label for="acoesCondicionais">Ações Condicionais:</label>
                 <textarea id="acoesCondicionais" placeholder="O que ocorre em determinados cenários (ações condicionais)?"></textarea>
 
-                <label for="permissoes">3.3 Permissões:</label>
+                <label for="permissoes">Permissões:</label>
                 <textarea id="permissoes" placeholder="Quem pode acessar ou editar essa tela?"></textarea>
 
-                <label for="calculosAutomatizados">3.4 Cálculos Automatizados:</label>
+                <label for="calculosAutomatizados">Cálculos Automatizados:</label>
                 <textarea id="calculosAutomatizados" placeholder="Existem cálculos automáticos? Descreva."></textarea>
 
-                <label for="fluxoAcao">3.5 Fluxo de Ação:</label>
+                <label for="fluxoAcao">Fluxo de Ação:</label>
                 <textarea id="fluxoAcao" placeholder="O que acontece após o envio dos dados?"></textarea>
             </div>
 
             <!-- UI/UX (Interface e Experiência) -->
             <div class="section">
-                <h3>4. UI/UX (Interface e Experiência)</h3>
-                <label for="layout">4.1 Layout:</label>
+                <h3>UI/UX (Interface e Experiência)</h3>
+                <label for="layout">Layout:</label>
                 <textarea id="layout" placeholder="Descrição do layout da tela (campos, botões, etc.)"></textarea>
 
-                <label for="estilo">4.2 Estilo:</label>
+                <label for="estilo">Estilo:</label>
                 <textarea id="estilo" placeholder="Diretrizes de estilo (cores, tipografia, etc.)"></textarea>
 
-                <label for="feedbackVisual">4.3 Feedback Visual:</label>
+                <label for="feedbackVisual">Feedback Visual:</label>
                 <textarea id="feedbackVisual" placeholder="Mensagens de erro, sucesso, alertas visuais"></textarea>
 
-                <label for="navegacao">4.4 Navegação:</label>
+                <label for="navegacao">Navegação:</label>
                 <textarea id="navegacao" placeholder="Como o usuário navega entre as telas?"></textarea>
             </div>
 
             <!-- Integração com Outros Sistemas -->
             <div class="section">
-                <h3>5. Integração com Outros Sistemas</h3>
-                <label for="apis">5.1 APIs:</label>
+                <h3>Integração com Outros Sistemas</h3>
+                <label for="apis">APIs:</label>
                 <input type="text" id="apis" placeholder="Quais APIs são consumidas ou chamadas pela tela?">
 
-                <label for="bancoDeDados">5.2 Banco de Dados:</label>
+                <label for="bancoDeDados">Banco de Dados:</label>
                 <input type="text" id="bancoDeDados" placeholder="Quais tabelas, colunas ou registros são manipulados?">
 
-                <label for="outrosSistemas">5.3 Outros Sistemas:</label>
+                <label for="outrosSistemas">Outros Sistemas:</label>
                 <input type="text" id="outrosSistemas" placeholder="A tela se integra com outros sistemas? Quais?">
             </div>
 
             <!-- Desempenho e Escalabilidade -->
             <div class="section">
-                <h3>6. Desempenho e Escalabilidade</h3>
-                <label for="tempoResposta">6.1 Tempo de Resposta:</label>
+                <h3>Desempenho e Escalabilidade</h3>
+                <label for="tempoResposta">Tempo de Resposta:</label>
                 <input type="text" id="tempoResposta" placeholder="Quais são os requisitos de tempo de resposta?">
 
-                <label for="cargaDeDados">6.2 Carga de Dados:</label>
+                <label for="cargaDeDados">Carga de Dados:</label>
                 <textarea id="cargaDeDados" placeholder="Como a tela lida com grandes volumes de dados? (Paginação, etc.)"></textarea>
             </div>
 
             <!-- Mensagens de Erro e Logging -->
             <div class="section">
-                <h3>7. Mensagens de Erro e Logging</h3>
-                <label for="mensagensDeErro">7.1 Mensagens de Erro:</label>
+                <h3>Mensagens de Erro e Logging</h3>
+                <label for="mensagensDeErro">Mensagens de Erro:</label>
                 <textarea id="mensagensDeErro" placeholder="Quais mensagens de erro o sistema deve exibir para o usuário?"></textarea>
 
-                <label for="logging">7.2 Logging:</label>
+                <label for="logging">Logging:</label>
                 <textarea id="logging" placeholder="Como e onde os erros serão registrados?"></textarea>
             </div>
 
             <!-- Testes -->
             <div class="section">
-                <h3>8. Testes</h3>
-                <label for="criteriosAceitacao">8.1 Critérios de Aceitação:</label>
+                <h3>Testes</h3>
+                <label for="criteriosAceitacao">Critérios de Aceitação:</label>
                 <textarea id="criteriosAceitacao" placeholder="Quais critérios definem que a tela está funcionando corretamente?"></textarea>
 
-                <label for="cenariosTeste">8.2 Cenários de Teste:</label>
+                <label for="cenariosTeste">Cenários de Teste:</label>
                 <textarea id="cenariosTeste" placeholder="Quais são os casos de teste mais críticos para essa tela?"></textarea>
             </div>
 
             <!-- Links e Dependências -->
             <div class="section">
-                <h3>9. Links e Dependências</h3>
-                <label for="dependencias">9.1 Dependências:</label>
-                <input type="text" id="dependencias" placeholder="A tela depende de dados ou módulos específicos? Quais?">
+                <h3>Links e Dependências</h3>
+                <label for="dependencias">Dependências:</label>
+                <input type="text" id="dependencias" placeholder="A tela depende de outras telas ou serviços? Quais?">
 
-                <label for="outrosModulos">9.2 Outros Módulos/Telas:</label>
-                <input type="text" id="outrosModulos" placeholder="Esta tela fornece dados ou é dependente de outras telas/módulos?">
+                <label for="linksUteis">Links Úteis:</label>
+                <input type="text" id="linksUteis" placeholder="Links para documentação, design, etc.">
             </div>
-            <button type="button" onclick="gerarCSV()">Gerar CSV</button>
+
+            <button type="submit">Gerar CSV</button>
         </form>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="script.js" defer></script> <!-- Ensure your script.js is loaded after the libraries -->
+
+    <script src="script.js"></script>
 </body>
 </html>
