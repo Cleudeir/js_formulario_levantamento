@@ -163,10 +163,11 @@
                 <input type="text" id="linksUteis" placeholder="Links para documentação, design, etc.">
             </div>
 
-            <button type="submit">Gerar CSV</button>
+            <button type="submit">Salvar em CSV</button>
+            <button type="button" onclick="window.print()">Imprimir / Salvar pdf</button>
         </form>
     </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
