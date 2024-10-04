@@ -73,6 +73,10 @@ button {
     margin-top: 15px;
 }
 
+.button{
+    margin-bottom: 20px;
+}
+
 button:hover {
     background-color: #218838;
 }
