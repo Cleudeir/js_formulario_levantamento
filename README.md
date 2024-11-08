@@ -1,5 +1,3 @@
-# Summary: README.md
-
 ## Project Overview
 
 * This project is a web application for gathering detailed information about a web page, generating a PDF document for documentation purposes. 
